@@ -27,7 +27,6 @@ namespace AoC2019.Solutions
                                  join v2 in visited2 on new { v1.X, v1.Y } equals new { v2.X, v2.Y }
                                  select v1);
 
-
             var shortest = intersections.Select(a => Math.Abs(a.X) + Math.Abs(a.Y)).Where(a => a != 0).Min();
 
             Console.WriteLine(shortest);
