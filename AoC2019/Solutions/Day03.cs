@@ -34,8 +34,6 @@ namespace AoC2019.Solutions
 
         }
 
-
-
         public void Solve2()
         {
             var visited1 = GetVisited(Wires[0]);
@@ -44,7 +42,6 @@ namespace AoC2019.Solutions
             var intersections = (from v1 in visited1
                                  join v2 in visited2 on new { v1.X, v1.Y } equals new { v2.X, v2.Y }
                                  select (X: v1.X, Y: v1.Y, Steps: v1.Steps + v2.Steps)).OrderBy(a => a.Steps);
-
 
             var shortest = intersections.Where(a => (Math.Abs(a.X) + Math.Abs(a.Y)) != 0).FirstOrDefault();
 
