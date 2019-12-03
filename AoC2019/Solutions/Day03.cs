@@ -7,90 +7,80 @@ namespace AoC2019.Solutions
 {
     public class Day03 : ISolution
     {
-        private string InputFilename { get; set; }
-        private List<int> Input { get; set; }
+        private List<List<(char Direction, int Distance)>> Wires { get; set; }
 
         public void Initialize(string filename)
         {
-            InputFilename = filename;
+            Wires = File.ReadAllLines(filename)
+                    .Select(a => a.Split(",")
+                                  .Select(d => (Convert.ToChar(d.Substring(0, 1)), Convert.ToInt32(d.Substring(1))))
+                                  .ToList())
+                    .ToList();
         }
 
         public void Solve1()
         {
-            var result = Run(12, 2);
+            var visited1 = GetVisited(Wires[0]);
+            var visited2 = GetVisited(Wires[1]);
 
-            if (result == Int32.MinValue) return;
+            var intersections = (from v1 in visited1
+                                 join v2 in visited2 on new { v1.X, v1.Y } equals new { v2.X, v2.Y }
+                                 select v1);
 
-            Console.WriteLine(result);
+
+            var shortest = intersections.Select(a => Math.Abs(a.X) + Math.Abs(a.Y)).Where(a => a != 0).Min();
+
+            Console.WriteLine(shortest);
+
         }
+
+
 
         public void Solve2()
         {
-            for (int noun = 0; noun <= 99; noun++)
-            {
-                for (int verb = 0; verb <= 99; verb++)
-                {
-                    var result = Run(noun, verb);
+            var visited1 = GetVisited(Wires[0]);
+            var visited2 = GetVisited(Wires[1]);
 
-                    if (result == Int32.MinValue) return;
+            var intersections = (from v1 in visited1
+                                 join v2 in visited2 on new { v1.X, v1.Y } equals new { v2.X, v2.Y }
+                                 select (X: v1.X, Y: v1.Y, Steps: v1.Steps + v2.Steps)).OrderBy(a => a.Steps);
 
-                    if (result == 19690720)
-                    {
-                        Console.WriteLine($"({noun}, {verb}) = {100 * noun + verb}");
-                    }
-                }
-            }
+
+            var shortest = intersections.Where(a => (Math.Abs(a.X) + Math.Abs(a.Y)) != 0).FirstOrDefault();
+
+            Console.WriteLine(shortest.Steps);
         }
 
-        private void InitializeInput()
+
+        private List<(int X, int Y, int Steps)> GetVisited(List<(char Direction, int Distance)> wire)
         {
-            Input = File.ReadAllText(InputFilename).Split(",")
-                .Select(d => int.Parse(d))
-                .ToList(); 
-        }
+            var current = (X: 0, Y: 0, Steps: 0);
+            var visited = new List<(int X, int Y, int Steps)> { current };
+            var steps = 0;
 
-        private int Run(int noun, int verb)
-        {
-            InitializeInput();
-
-            int idx1, idx2, idx3;
-
-            Input[1] = noun;
-            Input[2] = verb;
-
-            try
+            foreach (var m in wire)
             {
-                for (int i = 0; i < Input.Count(); i += 4)
+                var distance = m.Distance;
+                var direction = m.Direction == 'U' || m.Direction == 'R' ? 1 : -1;
+
+                while (distance > 0)
                 {
-                    var opcode = Input[i];
-                    switch (opcode)
+                    steps++;
+                    if (m.Direction == 'U' || m.Direction == 'D')
                     {
-                        case 1:
-                            idx1 = Input[i + 1];
-                            idx2 = Input[i + 2];
-                            idx3 = Input[i + 3];
-                            Input[idx3] = Input[idx1] + Input[idx2];
-                            break;
-                        case 2:
-                            idx1 = Input[i + 1];
-                            idx2 = Input[i + 2];
-                            idx3 = Input[i + 3];
-                            Input[idx3] = Input[idx1] * Input[idx2];
-                            break;
-                        case 99:
-                            break;
+                        current.Y += direction;
+                    }
+                    else
+                    {
+                        current.X += direction;
                     }
 
-                    if (opcode == 99) break;
+                    distance--;
+                    visited.Add((current.X, current.Y, steps));
                 }
             }
-            catch (Exception)
-            {
-                Console.WriteLine("Invalid Program");
-                return Int32.MinValue;
-            }
 
-            return Input[0];
+            return visited;
         }
     }
 }

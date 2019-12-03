@@ -61,7 +61,7 @@ namespace AoC2019
 
         private static ISolution GetSolution(int day)
         {
-            var className = $"Solutions.Day{day:00}";
+            var className = $"AoC2019.Solutions.Day{day:00}";
             var type = Type.GetType(className);
             var solution = type == null ? null : Activator.CreateInstance(type) as ISolution;
             return solution;
