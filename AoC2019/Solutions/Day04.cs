@@ -59,7 +59,7 @@ namespace AoC2019.Solutions
                 }
             }
 
-            return false;
+            return true;
         }
 
         private bool MeetsCriteria2(int password)
