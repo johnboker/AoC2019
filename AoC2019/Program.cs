@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using AoC2019.Solutions;
 
 namespace AoC2019
@@ -28,8 +29,6 @@ namespace AoC2019
                 files = files.Where(a => !a.Contains("test")).ToArray();
             }
 
-            var stopwatch = new Stopwatch();
-
             foreach (var file in files)
             {
                 if (File.Exists(file))
@@ -40,23 +39,13 @@ namespace AoC2019
                         solution.Initialize(file);
 
                         Console.WriteLine($"\n****** {file} ******");
-
-                        Console.Write("Part 1:\t");
-
-                        stopwatch.Reset();
-                        stopwatch.Start();
-                        solution.Solve1();
-                        stopwatch.Stop();
-                        Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms]");
-                        Console.WriteLine();
-                        Console.Write("Part 2:\t");
-
-                        stopwatch.Reset();
-                        stopwatch.Start();
-                        solution.Solve2();
-                        stopwatch.Stop();
-                        Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms]");
-                        Console.WriteLine();
+                        var actions = new Action[] { solution.Solve1, solution.Solve2 };
+                        for (int i = 0; i < actions.Count(); i++)
+                        {
+                            Console.Write($"Part {i + 1}:\t");
+                            var executionTime = Execute(actions[i]);
+                            Console.WriteLine($"[{executionTime} ms]\n");
+                        }
                     }
                     else
                     {
@@ -71,9 +60,19 @@ namespace AoC2019
             }
         }
 
+        private static long Execute(Action action)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Reset();
+            stopwatch.Start();
+            action.Invoke();
+            stopwatch.Stop();
+            return stopwatch.ElapsedMilliseconds;
+        }
+
         private static ISolution GetSolution(int day)
         {
-            var className = $"AoC2019.Solutions.Day{day:00}";
+            var className = $"{Assembly.GetExecutingAssembly().GetName().Name}.Solutions.Day{day:00}";
             var type = Type.GetType(className);
             var solution = type == null ? null : Activator.CreateInstance(type) as ISolution;
             return solution;

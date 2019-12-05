@@ -26,7 +26,7 @@ namespace AoC2019.Solutions
         public void Solve2()
         {
             var cnt = 0;
-            for (var i = 246515; i <= 739105; i++)
+            for (var i = 125730; i <= 579381; i++)
             {
                 cnt += MeetsCriteria2(i) ? 1 : 0;
             }
