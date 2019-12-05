@@ -45,19 +45,20 @@ namespace AoC2019.Solutions
                 while (opcode != 99)
                 {
                     opcode = Instructions[i] % 100;
-                    var mode1 = (Instructions[i] / 100) % 10;
-                    var mode2 = Instructions[i] / 1000;
+                    var p1mode = (Instructions[i] / 100) % 10;
+                    var p2mode = (Instructions[i] / 1000) % 10;
+                    var p3mode = (Instructions[i] / 10000) % 10;
 
                     int GetValue(int m, int v) => m != 0 ? v : Instructions[v];
 
                     switch (opcode)
                     {
                         case 1:
-                            Instructions[Instructions[i + 3]] = GetValue(mode1, Instructions[i + 1]) + GetValue(mode2, Instructions[i + 2]);
+                            Instructions[Instructions[i + 3]] = GetValue(p1mode, Instructions[i + 1]) + GetValue(p2mode, Instructions[i + 2]);
                             i += 4;
                             break;
                         case 2:
-                            Instructions[Instructions[i + 3]] = GetValue(mode1, Instructions[i + 1]) * GetValue(mode2, Instructions[i + 2]);
+                            Instructions[Instructions[i + 3]] = GetValue(p1mode, Instructions[i + 1]) * GetValue(p2mode, Instructions[i + 2]);
                             i += 4;
                             break;
                         case 3:
@@ -65,21 +66,21 @@ namespace AoC2019.Solutions
                             i += 2;
                             break;
                         case 4:
-                            Console.WriteLine(GetValue(mode1, Instructions[i + 1]));
+                            Console.WriteLine(GetValue(p1mode, Instructions[i + 1]));
                             i += 2;
                             break;
                         case 5:
-                            i = GetValue(mode1, Instructions[i + 1]) != 0 ? GetValue(mode2, Instructions[i + 2]) : (i + 3);
+                            i = GetValue(p1mode, Instructions[i + 1]) != 0 ? GetValue(p2mode, Instructions[i + 2]) : (i + 3);
                             break;
                         case 6:
-                            i = GetValue(mode1, Instructions[i + 1]) == 0 ? GetValue(mode2, Instructions[i + 2]) : (i + 3);
+                            i = GetValue(p1mode, Instructions[i + 1]) == 0 ? GetValue(p2mode, Instructions[i + 2]) : (i + 3);
                             break;
                         case 7:
-                            Instructions[Instructions[i + 3]] = GetValue(mode1, Instructions[i + 1]) < GetValue(mode2, Instructions[i + 2]) ? 1 : 0;
+                            Instructions[Instructions[i + 3]] = GetValue(p1mode, Instructions[i + 1]) < GetValue(p2mode, Instructions[i + 2]) ? 1 : 0;
                             i += 4;
                             break;
                         case 8:
-                            Instructions[Instructions[i + 3]] = GetValue(mode1, Instructions[i + 1]) == GetValue(mode2, Instructions[i + 2]) ? 1 : 0;
+                            Instructions[Instructions[i + 3]] = GetValue(p1mode, Instructions[i + 1]) == GetValue(p2mode, Instructions[i + 2]) ? 1 : 0;
                             i += 4;
                             break;
                         case 99:
