@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AoC2019.Solutions;
@@ -22,10 +23,12 @@ namespace AoC2019
             {
                 files = files.Where(a => a.Contains("test")).ToArray();
             }
-            else if(!args.Contains("-all"))
+            else if (!args.Contains("-all"))
             {
                 files = files.Where(a => !a.Contains("test")).ToArray();
             }
+
+            var stopwatch = new Stopwatch();
 
             foreach (var file in files)
             {
@@ -39,11 +42,20 @@ namespace AoC2019
                         Console.WriteLine($"\n****** {file} ******");
 
                         Console.Write("Part 1:\t");
+
+                        stopwatch.Reset();
+                        stopwatch.Start();
                         solution.Solve1();
-
+                        stopwatch.Stop();
+                        Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms]");
+                        Console.WriteLine();
                         Console.Write("Part 2:\t");
-                        solution.Solve2();
 
+                        stopwatch.Reset();
+                        stopwatch.Start();
+                        solution.Solve2();
+                        stopwatch.Stop();
+                        Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms]");
                         Console.WriteLine();
                     }
                     else
