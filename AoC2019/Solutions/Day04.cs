@@ -9,13 +9,18 @@ namespace AoC2019.Solutions
     {
         public void Initialize(string filename)
         {
-            
+            var values = File.ReadAllText(filename).Split("-").Select(a => int.Parse(a)).ToList();
+            PasswordStart = values[0];
+            PasswordEnd = values[1];
         }
+
+        private int PasswordStart { get; set; }
+        private int PasswordEnd { get; set; }
 
         public void Solve1()
         {
             var cnt = 0;
-            for (var i = 246515; i <= 739105; i++)
+            for (var i = PasswordStart; i <= PasswordEnd; i++)
             {
                 cnt += MeetsCriteria1(i) ? 1 : 0;
             }
@@ -26,7 +31,7 @@ namespace AoC2019.Solutions
         public void Solve2()
         {
             var cnt = 0;
-            for (var i = 125730; i <= 579381; i++)
+            for (var i = PasswordStart; i <= PasswordEnd; i++)
             {
                 cnt += MeetsCriteria2(i) ? 1 : 0;
             }

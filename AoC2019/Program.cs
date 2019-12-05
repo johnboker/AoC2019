@@ -36,9 +36,9 @@ namespace AoC2019
                     var solution = GetSolution(day);
                     if (solution != null)
                     {
+                        Console.WriteLine($"\n****** {file} ******");
                         solution.Initialize(file);
 
-                        Console.WriteLine($"\n****** {file} ******");
                         var actions = new Action[] { solution.Solve1, solution.Solve2 };
                         for (int i = 0; i < actions.Count(); i++)
                         {
