@@ -49,7 +49,7 @@ namespace AoC2019.Solutions
         }
 
 
-        private string FindPaths(List<string> visited, string from, string path, List<string> paths)
+        private void FindPaths(List<string> visited, string from, string path, List<string> paths)
         {
             paths.Add(path);
             var orbits = MapData.Where(a => a.OrbitingMe == from || a.Name == from);
@@ -60,12 +60,10 @@ namespace AoC2019.Solutions
                 if (!visited.Contains(o))
                 {
                     visited.Add(o);
-                    var p = FindPaths(visited, o, path + "-" + o, paths);
+                    FindPaths(visited, o, path + "-" + o, paths);
                     visited.Remove(o);
                 }
             }
-
-            return "";
         }
 
         private class OrbitInfo
