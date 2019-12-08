@@ -51,19 +51,20 @@ namespace AoC2019.Solutions
 
         private void FindPaths(List<string> visited, string from, string path, List<string> paths)
         {
-            paths.Add(path);
-            var orbits = MapData.Where(a => a.OrbitingMe == from || a.Name == from);
-            var all = orbits.SelectMany(a => new List<string> { a.Name, a.OrbitingMe });
-
-            foreach (var o in all)
+            var orbits = MapData.Where(a => a.OrbitingMe == from || a.Name == from)
+                                .SelectMany(a => new List<string> { a.Name, a.OrbitingMe });
+            
+            foreach (var o in orbits)
             {
                 if (!visited.Contains(o))
                 {
                     visited.Add(o);
-                    FindPaths(visited, o, path + "-" + o, paths);
+                    FindPaths(visited, o, $"{path}-{o}", paths);
                     visited.Remove(o);
                 }
             }
+
+            paths.Add(path);
         }
 
         private class OrbitInfo
