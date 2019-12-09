@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static AoC2019.Solutions.Day07.IntercodeComputer;
+using static AoC2019.Solutions.Day07.IntcodeComputer;
 
 namespace AoC2019.Solutions
 {
@@ -33,7 +33,7 @@ namespace AoC2019.Solutions
                 {
                     var amp = new Amplifier
                     {
-                        IntercodeComputer = new IntercodeComputer
+                        IntcodeComputer = new IntcodeComputer
                         {
                             Instructions = GetInstructions(),
                             Outputs = new Queue<int>(),
@@ -41,12 +41,12 @@ namespace AoC2019.Solutions
                         }
                     };
 
-                    amp.IntercodeComputer.Inputs.Enqueue(phase);
-                    amp.IntercodeComputer.Inputs.Enqueue(output);
+                    amp.IntcodeComputer.Inputs.Enqueue(phase);
+                    amp.IntcodeComputer.Inputs.Enqueue(output);
 
-                    var exitCode = amp.IntercodeComputer.Run();
+                    var exitCode = amp.IntcodeComputer.Run();
 
-                    output = amp.IntercodeComputer.Outputs.Dequeue();
+                    output = amp.IntcodeComputer.Outputs.Dequeue();
                 }
 
                 max = Math.Max(output, max);
@@ -67,7 +67,7 @@ namespace AoC2019.Solutions
                     amps.Add(new Amplifier
                     {
                         Label = $"Amp {(char)('A' + i)}",
-                        IntercodeComputer = new IntercodeComputer
+                        IntcodeComputer = new IntcodeComputer
                         {
                             Instructions = GetInstructions(),
                         }
@@ -78,17 +78,17 @@ namespace AoC2019.Solutions
                 {
                     amps[i].NextAmplifier = amps[(i + 1) % 5];
                     amps[i].PrevAmplifier = amps[((i - 1) % 5 + 5) % 5];
-                    amps[i].IntercodeComputer.Outputs = new Queue<int>();
-                    amps[i].NextAmplifier.IntercodeComputer.Inputs = amps[i].IntercodeComputer.Outputs;
+                    amps[i].IntcodeComputer.Outputs = new Queue<int>();
+                    amps[i].NextAmplifier.IntcodeComputer.Inputs = amps[i].IntcodeComputer.Outputs;
                 }
 
 
                 for (var i = 0; i < 5; i++)
                 {
-                    amps[i].IntercodeComputer.Inputs.Enqueue(phases[i]);
+                    amps[i].IntcodeComputer.Inputs.Enqueue(phases[i]);
                 }
 
-                amps[0].IntercodeComputer.Inputs.Enqueue(0);
+                amps[0].IntcodeComputer.Inputs.Enqueue(0);
 
                 var exitCode = ExitCode.NEED_INPUT;
 
@@ -105,9 +105,9 @@ namespace AoC2019.Solutions
                 }
 
 
-                while (amps[4].IntercodeComputer.Outputs.Count() > 0)
+                while (amps[4].IntcodeComputer.Outputs.Count() > 0)
                 {
-                    output = amps[4].IntercodeComputer.Outputs.Dequeue();
+                    output = amps[4].IntcodeComputer.Outputs.Dequeue();
                 }
                 max = Math.Max(max, output);
 
@@ -121,17 +121,17 @@ namespace AoC2019.Solutions
         public class Amplifier
         {
             public string Label { get; set; }
-            public IntercodeComputer IntercodeComputer { get; set; }
+            public IntcodeComputer IntcodeComputer { get; set; }
             public Amplifier NextAmplifier { get; set; }
             public Amplifier PrevAmplifier { get; set; }
 
             public ExitCode Run()
             {
-                return IntercodeComputer.Run();
+                return IntcodeComputer.Run();
             }
         }
 
-        public class IntercodeComputer
+        public class IntcodeComputer
         {
             public List<int> Instructions { get; set; }
 

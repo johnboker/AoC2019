@@ -67,7 +67,7 @@ namespace AoC2019.Solutions
 
             for (int i = 0; i < layers.Count(); i++)
             {
-                var layer = layers[i];
+                var layer = layers[i];						
                 for (var c = 0; c < width; c++)
                 {
                     for (var r = 0; r < height; r++)
